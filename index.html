@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>C Pointer Questions</title>
+<head>
+<meta charset="UTF-8">
+<title>C Pointer Questions</title>
 
-    <style>
+<style>
 body {
   font-family: monospace;
   background: #0f1115;
@@ -41,25 +41,18 @@ input {
 }
 
 button {
-  margin-left: 10px;
-  padding: 6px 10px;
+  padding: 10px 16px;
   background: #222;
   color: #fff;
   border: 1px solid #555;
   cursor: pointer;
+  margin-bottom: 20px;
 }
 
-.result {
-  margin-top: 8px;
-  font-weight: bold;
-}
-
-.correct {
-  color: #4caf50;
-}
-
-.wrong {
-  color: #f44336;
+#resultBox {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #66d9ef;
 }
 
 .trap {
@@ -67,289 +60,258 @@ button {
   opacity: 0;
   pointer-events: none;
 }
-    </style>
+</style>
 
-    <script>
-      function checkAnswer(id, correct) {
-        const input = document.getElementById("input-" + id).value.trim();
-        const result = document.getElementById("result-" + id);
+<script>
+function submitTest() {
+  const answers = {
+    1: "2",
+    2: "2",
+    3: "7",
+    4: "30",
+    5: "7",
+    6: "c",
+    7: "1",
+    9: "16",
+    10: "12",
+    11: "20",
+    12: "13",
+    13: "y",
+    14: "18",
+    15: "6",
+    16: "c",
+    17: "6",
+    18: "24"
+  };
 
-        if (input === correct) {
-          result.textContent = "Correct";
-          result.className = "result correct";
-        } else {
-          result.textContent = "Wrong";
-          result.className = "result wrong";
-        }
-      }
-    </script>
+  let score = 0;
+  let bitfield = 0;
+  let index = 0;
 
-  </head>
-  <body>
+  for (const id in answers) {
+    const input = document.getElementById("input-" + id);
+    if (!input) continue;
 
-    <h1>C Pointer / Array / String Questions</h1>
+    const val = input.value.trim();
+    if (val === answers[id]) {
+      score++;
+      bitfield |= (1 << index);
+    }
 
-    <!-- Q2: trap changes +1 -> +0 -->
-    <div class="question">
-      What is printed?
-      <code>
-        int a[] = {1,2,3};
-        int *p = a;
+    index++;
+  }
 
-        printf("%d\n", *(p + 1<span class="trap">-1</span>));
-      </code>
+  let packed = (bitfield << 8) | score;
 
-      <input id="input-1">
-      <button onclick="checkAnswer(1, '2')">Check</button>
-      <div id="result-1" class="result"></div>
-    </div>
+  packed ^= 0x5A3C;
 
-    <!-- Q2: trap changes +1 -> +0 -->
-    <div class="question">
-      What is printed?
-      <code>
-        int a[] = {1,3,16};
-        int *p = a;
+  const code = packed.toString(36).toUpperCase();
 
-        printf("%d\n", (*p) + 1<span class="trap">+14</span>));
-      </code>
+  document.getElementById("resultBox").textContent =
+    "Result Code: " + code;
+}
+</script>
 
-      <input id="input-2">
-      <button onclick="checkAnswer(2, '2')">Check</button>
-      <div id="result-2" class="result"></div>
-    </div>
+</head>
+<body>
 
-    <!-- Q3: assignment vs accumulation -->
-    <div class="question">
-      What is printed?
-      <code>
-        int x = 5;
-        int *p = &x;
+<h1>C Pointer / Array / String Questions</h1>
 
-        *p += 2<span class="trap">-1</span>;
+<button onclick="submitTest()">Submit Test</button>
+<div id="resultBox"></div>
 
-        printf("%d\n", x);
-      </code>
+<div class="question">
+What is printed?
+<code>
+int a[] = {1,2,3};
+int *p = a;
 
-      <input id="input-3">
-      <button onclick="checkAnswer(3, '7')">Check</button>
-      <div id="result-3" class="result"></div>
-    </div>
+printf("%d\n", *(p + 1<span class="trap">-1</span>));
+</code>
+<input id="input-1">
+</div>
 
-    <!-- Q4: index preserved but altered when copied -->
-    <div class="question">
-      What is printed?
-      <code>
-        int a[] = {10,20,30};
-        int *p = a;
+<div class="question">
+What is printed?
+<code>
+int a[] = {1,3,16};
+int *p = a;
 
-        printf("%d\n", p[1<span class="trap">-1</span> + 1]);
-      </code>
+printf("%d\n", (*p) + 1<span class="trap">+14</span>);
+</code>
+<input id="input-2">
+</div>
 
-      <input id="input-4">
-      <button onclick="checkAnswer(4, '30')">Check</button>
-      <div id="result-4" class="result"></div>
-    </div>
+<div class="question">
+What is printed?
+<code>
+int x = 5;
+int *p = &x;
 
-    <!-- Q5: pointer offset altered but still valid -->
-    <div class="question">
-      What is printed?
-      <code>
-        int a[] = {7,8,9};
-        int *p = a;
+*p += 2<span class="trap">-1</span>;
 
-        printf("%d\n", *(p<span class="trap">+1</span>));
-      </code>
+printf("%d\n", x);
+</code>
+<input id="input-3">
+</div>
 
-      <input id="input-5">
-      <button onclick="checkAnswer(5, '7')">Check</button>
-      <div id="result-5" class="result"></div>
-    </div>
+<div class="question">
+What is printed?
+<code>
+int a[] = {10,20,30};
+int *p = a;
 
-    <!-- Q6: char pointer -->
-    <div class="question">
-      What is printed?
-      <code>
-        char s[] = "abcd";
-        char *p = s;
+printf("%d\n", p[1<span class="trap">-1</span> + 1]);
+</code>
+<input id="input-4">
+</div>
 
-        printf("%c\n", *(p + 2<span class="trap">-1</span>));
-      </code>
+<div class="question">
+What is printed?
+<code>
+int a[] = {7,8,9};
+int *p = a;
 
-      <input id="input-6">
-      <button onclick="checkAnswer(6, 'c')">Check</button>
-      <div id="result-6" class="result"></div>
-    </div>
+printf("%d\n", *(p<span class="trap">+1</span>));
+</code>
+<input id="input-5">
+</div>
 
-    <!-- Q7: logical vs equality -->
-    <div class="question">
-      What is printed?
-      <code>
-        int x = 3;
-        int y = 3;
+<div class="question">
+What is printed?
+<code>
+char s[] = "abcd";
+char *p = s;
 
-        printf("%d\n", x == y<span class="trap"> && 0</span>);
-      </code>
+printf("%c\n", *(p + 2<span class="trap">-1</span>));
+</code>
+<input id="input-6">
+</div>
 
-      <input id="input-7">
-      <button onclick="checkAnswer(7, '1')">Check</button>
-      <div id="result-7" class="result"></div>
-    </div>
+<div class="question">
+What is printed?
+<code>
+int x = 3;
+int y = 3;
 
+printf("%d\n", x == y<span class="trap"> && 0</span>);
+</code>
+<input id="input-7">
+</div>
 
-    <!-- Q9 -->
-    <div class="question">
-      What is printed?
-      <code>
-        int a[] = {2,4,6,8};
-        int *p = a + 1;
+<div class="question">
+What is printed?
+<code>
+int a[] = {2,4,6,8};
+int *p = a + 1;
 
-        printf("%d\n", *(p + 1<span class="trap">-1</span>) * *(p));
-      </code>
+printf("%d\n", *(p + 1<span class="trap">-1</span>) * *(p));
+</code>
+<input id="input-9">
+</div>
 
-      <input id="input-9">
-      <button onclick="checkAnswer(9, '16')">Check</button>
-      <div id="result-9" class="result"></div>
-    </div>
+<div class="question">
+What is printed?
+<code>
+int a[] = {1,3,5,7};
+int *p = a;
 
-    <!-- Q10 -->
-    <div class="question">
-      What is printed?
-      <code>
-        int a[] = {1,3,5,7};
-        int *p = a;
+p = p + 2;
 
-        p = p + 2;
+printf("%d\n", *(p<span class="trap">-1</span>) + *(p));
+</code>
+<input id="input-10">
+</div>
 
-        printf("%d\n", *(p<span class="trap">-1</span>) + *(p));
-      </code>
+<div class="question">
+What is printed?
+<code>
+int a[] = {10,20,30};
+int *p = a;
 
-      <input id="input-10">
-      <button onclick="checkAnswer(10, '12')">Check</button>
-      <div id="result-10" class="result"></div>
-    </div>
+printf("%d\n", *(p + 2<span class="trap">-1</span>) - *(p));
+</code>
+<input id="input-11">
+</div>
 
-    <!-- Q11 -->
-    <div class="question">
-      What is printed?
-      <code>
-        int a[] = {10,20,30};
-        int *p = a;
+<div class="question">
+What is printed?
+<code>
+int a[] = {5,6,7};
+int *p = a;
 
-        printf("%d\n", *(p + 2<span class="trap">-1</span>) - *(p));
-      </code>
+printf("%d\n", *(p + 1<span class="trap">-1</span>) + *(p + 2));
+</code>
+<input id="input-12">
+</div>
 
-      <input id="input-11">
-      <button onclick="checkAnswer(11, '20')">Check</button>
-      <div id="result-11" class="result"></div>
-    </div>
+<div class="question">
+What is printed?
+<code>
+char s[] = "wxyz";
+char *p = s + 1;
 
-    <!-- Q12 -->
-    <div class="question">
-      What is printed?
-      <code>
-        int a[] = {5,6,7};
-        int *p = a;
+printf("%c\n", *(p + 1<span class="trap">-1</span>));
+</code>
+<input id="input-13">
+</div>
 
-        printf("%d\n", *(p + 1<span class="trap">-1</span>) + *(p + 2));
-      </code>
+<div class="question">
+What is printed?
+<code>
+int a[] = {3,6,9};
+int *p = a;
 
-      <input id="input-12">
-      <button onclick="checkAnswer(12, '13')">Check</button>
-      <div id="result-12" class="result"></div>
-    </div>
+p++;
 
-    <!-- Q13 -->
-    <div class="question">
-      What is printed?
-      <code>
-        char s[] = "wxyz";
-        char *p = s + 1;
+printf("%d\n", *(p<span class="trap">-1</span>) * *(p));
+</code>
+<input id="input-14">
+</div>
 
-        printf("%c\n", *(p + 1<span class="trap">-1</span>));
-      </code>
+<div class="question">
+What is printed?
+<code>
+int a[] = {1,2,3,4};
+int *p = a + 2;
 
-      <input id="input-13">
-      <button onclick="checkAnswer(13, 'y')">Check</button>
-      <div id="result-13" class="result"></div>
-    </div>
+printf("%d\n", *(p<span class="trap">-1</span>) + *(p + 1));
+</code>
+<input id="input-15">
+</div>
 
-    <!-- Q14 -->
-    <div class="question">
-      What is printed?
-      <code>
-        int a[] = {3,6,9};
-        int *p = a;
+<div class="question">
+What is printed?
+<code>
+char s[] = "abcd";
+char *p = s;
 
-        p++;
+printf("%c\n", *(p + (2<span class="trap">-1</span>)));
+</code>
+<input id="input-16">
+</div>
 
-        printf("%d\n", *(p<span class="trap">-1</span>) * *(p));
-      </code>
+<div class="question">
+What is printed?
+<code>
+int a[] = {2,3,4};
+int *p = a;
 
-      <input id="input-14">
-      <button onclick="checkAnswer(14, '18')">Check</button>
-      <div id="result-14" class="result"></div>
-    </div>
+printf("%d\n", *(p + 1) * *(p + 1<span class="trap">-1</span>));
+</code>
+<input id="input-17">
+</div>
 
-    <!-- Q15 -->
-    <div class="question">
-      What is printed?
-      <code>
-        int a[] = {1,2,3,4};
-        int *p = a + 2;
+<div class="question">
+What is printed?
+<code>
+int a[] = {8,16,32};
+int *p = a + 1;
 
-        printf("%d\n", *(p<span class="trap">-1</span>) + *(p + 1));
-      </code>
+printf("%d\n", *(p<span class="trap">-1</span>) + *(p));
+</code>
+<input id="input-18">
+</div>
 
-      <input id="input-15">
-      <button onclick="checkAnswer(15, '6')">Check</button>
-      <div id="result-15" class="result"></div>
-    </div>
-
-    <!-- Q16 -->
-    <div class="question">
-      What is printed?
-      <code>
-        char s[] = "abcd";
-        char *p = s;
-
-        printf("%c\n", *(p + (2<span class="trap">-1</span>)));
-      </code>
-
-      <input id="input-16">
-      <button onclick="checkAnswer(16, 'c')">Check</button>
-      <div id="result-16" class="result"></div>
-    </div>
-
-    <!-- Q17 -->
-    <div class="question">
-      What is printed?
-      <code>
-        int a[] = {2,3,4};
-        int *p = a;
-
-        printf("%d\n", *(p + 1) * *(p + 1<span class="trap">-1</span>));
-      </code>
-
-      <input id="input-17">
-      <button onclick="checkAnswer(17, '6')">Check</button>
-      <div id="result-17" class="result"></div>
-    </div>
-
-    <!-- Q18 -->
-    <div class="question">
-      What is printed?
-      <code>
-        int a[] = {8,16,32};
-        int *p = a + 1;
-
-        printf("%d\n", *(p<span class="trap">-1</span>) + *(p));
-      </code>
-
-      <input id="input-18">
-      <button onclick="checkAnswer(18, '24')">Check</button>
-      <div id="result-18" class="result"></div>
-    </div>
-
-  </body>
+</body>
 </html>
