@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>C Pointer & Array Questions</title>
+
+<style>
+body {
+    font-family: monospace;
+    background: #0f1115;
+    color: #e6e6e6;
+    padding: 40px;
+}
+
+h1 {
+    color: #66d9ef;
+}
+
+.question {
+    background: #1a1d23;
+    padding: 16px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+code {
+    display: block;
+    background: #0b0d10;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 6px;
+    white-space: pre;
+}
+
+/* invisible trap */
+.trap {
+    opacity: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+/* selection behavior (optional anti-copy annoyance) */
+::selection {
+    background: #444;
+}
+</style>
+</head>
+<body>
+
+<h1>C Pointer / Array / String Questions</h1>
+
+<div class="question">
+What is printed?
+<code>
+int a[] = {1, 2, 3, 4};
+int *p = a;
+
+printf("%d\n", *(p + 2));
+</code>
+</div>
+
+<div class="question">
+What is printed?
+<code>
+int a[] = {5, 10, 15};
+int *p = a;
+
+printf("%d\n", *p<span class="trap">+</span> + 1);
+</code>
+</div>
+
+<div class="question">
+What is printed?
+<code>
+char s[] = "hello";
+char *p = s;
+
+printf("%c\n", *(p + 1));
+</code>
+</div>
+
+<div class="question">
+What is printed?
+<code>
+char s[] = "abc";
+printf("%zu\n", sizeof(s));
+</code>
+</div>
+
+<div class="question">
+What is printed?
+<code>
+char *s = "abc";
+printf("%zu\n", sizeof(s));
+</code>
+</div>
+
+<div class="question">
+What is printed?
+<code>
+int a[] = {1, 2, 3};
+int *p = a;
+
+printf("%d\n", p[1<span class="trap">+</span>1]);
+</code>
+</div>
+
+<div class="question">
+What is printed?
+<code>
+int a[] = {10, 20, 30, 40};
+int *p = a;
+
+printf("%d\n", *(++p));
+</code>
+</div>
+
+<div class="question">
+What is printed?
+<code>
+int a[] = {10, 20, 30, 40};
+int *p = a;
+
+printf("%d\n", *p<span class="trap">=</span> + 2);
+</code>
+</div>
+
+<div class="question">
+What is printed?
+<code>
+char s[] = "abcd";
+char *p = s;
+
+printf("%c\n", p[2]);
+</code>
+</div>
+
+<div class="question">
+What is printed?
+<code>
+int a[] = {1, 2, 3};
+printf("%d\n", *(a + 1));
+</code>
+</div>
+
+</body>
+</html>
