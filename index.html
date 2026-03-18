@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -63,7 +62,6 @@ button {
     color: #f44336;
 }
 
-/* invisible operator trap */
 .trap {
     position: absolute;
     opacity: 0;
@@ -91,6 +89,7 @@ function checkAnswer(id, correct) {
 
 <h1>C Pointer / Array / String Questions</h1>
 
+<!-- Q1 -->
 <div class="question">
 What is printed?
 <code>
@@ -105,14 +104,14 @@ printf("%d\n", *(p + 1));
 <div id="result-1" class="result"></div>
 </div>
 
-
+<!-- Q2: trap changes +1 -> +0 -->
 <div class="question">
 What is printed?
 <code>
 int a[] = {1,2,3};
 int *p = a;
 
-printf("%d\n", *(p + 1<span class="trap">-</span>1));
+printf("%d\n", *(p + 1<span class="trap">-1</span>));
 </code>
 
 <input id="input-2">
@@ -120,14 +119,14 @@ printf("%d\n", *(p + 1<span class="trap">-</span>1));
 <div id="result-2" class="result"></div>
 </div>
 
-
+<!-- Q3: assignment vs accumulation -->
 <div class="question">
 What is printed?
 <code>
 int x = 5;
 int *p = &x;
 
-*p = *p + 2<span class="trap">-</span>;
+*p += 2<span class="trap">-1</span>;
 
 printf("%d\n", x);
 </code>
@@ -137,14 +136,14 @@ printf("%d\n", x);
 <div id="result-3" class="result"></div>
 </div>
 
-
+<!-- Q4: index preserved but altered when copied -->
 <div class="question">
 What is printed?
 <code>
 int a[] = {10,20,30};
 int *p = a;
 
-printf("%d\n", p[1<span class="trap">+0</span>]);
+printf("%d\n", p[1<span class="trap">-1</span> + 1]);
 </code>
 
 <input id="input-4">
@@ -152,26 +151,26 @@ printf("%d\n", p[1<span class="trap">+0</span>]);
 <div id="result-4" class="result"></div>
 </div>
 
-
+<!-- Q5: pointer offset altered but still valid -->
 <div class="question">
 What is printed?
 <code>
-int a[] = {1,2,3};
+int a[] = {7,8,9};
 int *p = a;
 
 printf("%d\n", *(p<span class="trap">+1</span>));
 </code>
 
 <input id="input-5">
-<button onclick="checkAnswer(5, '1')">Check</button>
+<button onclick="checkAnswer(5, '7')">Check</button>
 <div id="result-5" class="result"></div>
 </div>
 
-
+<!-- Q6: char pointer -->
 <div class="question">
 What is printed?
 <code>
-char s[] = "abc";
+char s[] = "abcd";
 char *p = s;
 
 printf("%c\n", *(p + 2<span class="trap">-1</span>));
@@ -182,36 +181,35 @@ printf("%c\n", *(p + 2<span class="trap">-1</span>));
 <div id="result-6" class="result"></div>
 </div>
 
-
+<!-- Q7: logical vs equality -->
 <div class="question">
 What is printed?
 <code>
 int x = 3;
-int y = 4;
+int y = 3;
 
-printf("%d\n", x == y<span class="trap">=</span>);
+printf("%d\n", x == y<span class="trap"> && 0</span>);
 </code>
 
 <input id="input-7">
-<button onclick="checkAnswer(7, '0')">Check</button>
+<button onclick="checkAnswer(7, '1')">Check</button>
 <div id="result-7" class="result"></div>
 </div>
 
-
+<!-- Q8: bitwise vs logical -->
 <div class="question">
 What is printed?
 <code>
 int x = 1;
 int y = 2;
 
-printf("%d\n", x | y<span class="trap">|</span>);
+printf("%d\n", x | y<span class="trap"> | 1</span>);
 </code>
 
 <input id="input-8">
 <button onclick="checkAnswer(8, '3')">Check</button>
 <div id="result-8" class="result"></div>
 </div>
-
 
 </body>
 </html>
